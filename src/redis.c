@@ -65,7 +65,11 @@ void initServer() {
     }
 
     server.current_client = NULL;
-
+    server.clients = listCreate();
+    server.clients_to_close = listCreate();
+    server.slaves = listCreate();
+    server.monitors = listCreate();
+    server.unblocked_clients = listCreate();
 }
 
 int main(int argc,char **argv)

@@ -21,14 +21,23 @@ struct redisServer {
     char *syslog_ident;             /* Syslog ident */
     int syslog_facility;            /* Syslog facility */
     redisClient *current_client;    /* Current client, only used on crash report*/
+
+    /* Configuration */
+    int verbosity;
+
+    /* Networking */
+    int port;                       /* TCP listening port */
+    char *bindaddr;                 /* Bind address or NULL */
+    char *unixsocket;               /* UNIX socket path */
+    mode_t unixsocketperm;          /* UNIX socket permission */
+    int ipfd;
+    int sofd;
     list *clients;                  /* List of active clients */
     list *clients_to_close;         /* Clients to close asynchronously */
     list *slaves;
     list *monitors;                 
     list *unblocked_clients;        /* list of clients to unblock before next loop */
-
-    /* Configuration */
-    int verbosity;
+    char neterr[ANET_ERR_LEN];
 };
 
 void redisLog(int level,const char *fmt, ...);

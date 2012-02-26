@@ -3,6 +3,9 @@
 
 #include "version.h" /*Version macro */
 #include "adlist.h"
+#include "anet.h"
+
+#include <sys/types.h>
 
 /*------------------------------------------------------------
  *Global server state

@@ -5,6 +5,9 @@
 #include "anet.h"
 
 #include <stdarg.h>
+#include <sys/socket.h>
+#include <errno.h>
+#include <netinet/in.h>
 
 static void anetSetError(char *err, const char *fmt, ...)
 {
@@ -26,7 +29,7 @@ static int anetCreateSocket(char *err, int domain)
         return ANET_ERR;
     }
 
-    if (setsocket(s,SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on)) == -1)
+    if (setsockopt(s,SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on)) == -1)
     {
         anetSetError(err, "setsocketopt SO_REUSEADDR :%s", strerror(errno));
         return ANET_ERR;

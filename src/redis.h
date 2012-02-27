@@ -47,6 +47,9 @@ struct redisServer {
 void redisLog(int level,const char *fmt, ...);
 void redisLogRaw(int level,const char *msg);
 
+void createPidFile(void);
+void daemonize(void);
+
 /* Log levels */
 #define REDIS_DEBUG 0
 #define REDIS_VERBOSE 1

@@ -105,6 +105,30 @@ void initServer() {
     }
 }
 
+#ifdef __linux__
+
+int linuxOvercommitMemoryValue(void) {
+    FILE *fp = fopen("/proc/sys/vm/overcommit_memory","r");
+    char buf[64];
+
+    if (!fp) return -1;
+    if (fgets(buf,64,fp) == NULL) {
+        fclose(fp);
+        return -1;
+    }
+    fclose(fp);
+
+    return atoi(buf);
+}
+
+void linuxOvercommitMemoryWarning() {
+    if(linuxOvercommitMemoryValue() == 0) {
+        redisLog(REDIS_WARNING, "WARNING overcommit_momory is set to 0! Background save may fail under low memory condition. To fix this issue add 'vm.overcommmit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect");
+    }
+}
+
+#endif /* __linux__ */
+
 int main(int argc,char **argv)
 {
     //where to use?
@@ -135,6 +159,11 @@ int main(int argc,char **argv)
     if (server.daemonize) daemonize();
     initServer();
     if (server.daemonize) createPidFile();
+    redisLog(REDIS_WARNING,"Server started, Redis version %d",REDIS_VERSION);
+#ifdef __linux__
+    linuxOvercommitMemoryWarning();
+#endif
+
 }
 
 /*========================================Utility functions ==============*/

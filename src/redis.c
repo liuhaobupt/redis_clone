@@ -34,6 +34,7 @@ void initServerConfig() {
     server.ipfd = -1;
     server.sofd = -1;
     server.pidfile = zstrdup("/var/run/redis.pid");
+    server.aof_state = REDIS_AOF_OFF;
 }
 
 void version() {
@@ -176,6 +177,11 @@ int main(int argc,char **argv)
     linuxOvercommitMemoryWarning();
 #endif
     start = ustime();
+    if (server.aof_state == REDIS_AOF_ON) {
+    
+    } else {
+    
+    }
 }
 
 /*========================================Utility functions ==============*/

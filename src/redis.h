@@ -42,6 +42,9 @@ struct redisServer {
     list *monitors;                 
     list *unblocked_clients;        /* list of clients to unblock before next loop */
     char neterr[ANET_ERR_LEN];
+
+    /* AOF persistence */
+    int aof_state;                  /* REDIS_AOF_(ON|OFF|WAIT_REWRITE) */
 };
 
 void redisLog(int level,const char *fmt, ...);
@@ -61,6 +64,11 @@ void daemonize(void);
 
 /* Static server configuration */
 #define REDIS_SERVERPORT 6379
+
+/* AOF states */
+#define REDIS_AOF_OFF 0
+#define REDIS_AOF_ON 1
+#define REDIS_AOF_WAIT_REWRITE 2
 
 #endif
 

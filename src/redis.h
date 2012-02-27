@@ -7,6 +7,16 @@
 
 #include <sys/types.h>
 
+typedef struct redisObject {
+    unsigned type:4;
+    unsigned notused:2;
+    unsigned encoding:4;
+    unsigned lru:22;
+    int refcount;
+    void *ptr;
+} robj;
+
+
 /*------------------------------------------------------------
  *Global server state
  *------------------------------------------------------------*/
@@ -47,11 +57,28 @@ struct redisServer {
     int aof_state;                  /* REDIS_AOF_(ON|OFF|WAIT_REWRITE) */
 };
 
+typedef void redisCommandProc(redisClient *c);
+typedef int *redisGetKeysProc(struct redisCommand *cmd, robj **argv, int argc, int *numkeys, int flags);
+struct redisCommand {
+    char *name;
+    redisCommandProc *proc;
+    int arbity;
+    char *sflags;
+    int flags;
+    redisGetKeysProc *getkeys_proc;
+    int firstkey;
+    int lastkey;
+    int keystep;
+    long long microseconds;
+    long long calls;
+};
+
 void redisLog(int level,const char *fmt, ...);
 void redisLogRaw(int level,const char *msg);
 
 void createPidFile(void);
 void daemonize(void);
+void getCommand(redisClient *c);
 
 /* Log levels */
 #define REDIS_DEBUG 0

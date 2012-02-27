@@ -129,11 +129,23 @@ void linuxOvercommitMemoryWarning() {
 
 #endif /* __linux__ */
 
+long long ustime(void) {
+    struct timeval tv;
+    long long ust;
+
+    gettimeofday(&tv, NULL);
+    ust = ((long long)tv.tv_sec)*1000000;
+    ust += tv.tv_usec;
+    return ust;
+}
+
+long long mstime(void) {
+    return ustime()/1000;
+}
+
 int main(int argc,char **argv)
 {
-    //where to use?
     long long start;
-
     struct timeval tv;
 
     //initialize libraries,and the server configuration
@@ -163,7 +175,7 @@ int main(int argc,char **argv)
 #ifdef __linux__
     linuxOvercommitMemoryWarning();
 #endif
-
+    start = ustime();
 }
 
 /*========================================Utility functions ==============*/

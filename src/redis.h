@@ -27,6 +27,7 @@ struct redisServer {
 
     /* Configuration */
     int verbosity;
+    char* pidfile;
 
     /* Networking */
     int port;                       /* TCP listening port */

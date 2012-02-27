@@ -33,6 +33,7 @@ void initServerConfig() {
     server.unixsocketperm = 0;
     server.ipfd = -1;
     server.sofd = -1;
+    server.pidfile = zstrdup("/var/run/redis.pid");
 }
 
 void version() {
@@ -57,6 +58,15 @@ void daemonize(void) {
         if(fd > STDERR_FILENO) close(fd);
     }
 }
+
+void createPidFile(void) {
+    FILE *fp = fopen(server.pidfile,"w");
+    if (fp) {
+        fprintf(fp,"%d\n",(int)getpid());
+        fclose(fp);
+    }
+}
+
 
 void setupSignalHandlers(void) {
     struct sigaction act;
@@ -120,11 +130,11 @@ int main(int argc,char **argv)
             configfile = argv[j++];
 
     } else {
-        //log something        
+        redisLog(REDIS_WARNING,"Warning: no config file specified, using the default config. In order to specify a config file use 'redis-server /path/to/redis.conf'");
     }
     if (server.daemonize) daemonize();
     initServer();
-
+    if (server.daemonize) createPidFile();
 }
 
 /*========================================Utility functions ==============*/

@@ -18,10 +18,21 @@
 struct redisServer server;
 
 /*
- * to do
+ * 
  */
 void initServerConfig() {
     server.syslog_enabled = 0;
+    server.daemonize = 0;
+    server.logfile = NULL;
+    server.syslog_ident = zstrdup("redis");
+    server.syslog_facility = LOG_LOCAL0;
+    server.verbosity = REDIS_NOTICE;
+    server.port = REDIS_SERVERPORT;
+    server.bindaddr = NULL;
+    server.unixsocket = NULL;
+    server.unixsocketperm = 0;
+    server.ipfd = -1;
+    server.sofd = -1;
 }
 
 void version() {

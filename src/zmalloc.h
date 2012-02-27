@@ -6,5 +6,6 @@
 void zmalloc_enable_thread_safeness(void);
 
 void *zmalloc(size_t size);
+char *zstrdup(const char *s);
 
 #endif

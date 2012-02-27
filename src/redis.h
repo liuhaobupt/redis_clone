@@ -55,5 +55,8 @@ void redisLogRaw(int level,const char *msg);
 
 #define REDIS_MAX_LOGMSG_LEN 1024
 
+/* Static server configuration */
+#define REDIS_SERVERPORT 6379
+
 #endif
 
